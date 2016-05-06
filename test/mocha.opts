@@ -1,6 +1,5 @@
 --require babel-polyfill
 --require co-mocha
---require should
 --compilers js:babel-core/register
 --reporter spec
 -w
