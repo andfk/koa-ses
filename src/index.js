@@ -64,24 +64,22 @@ function koaSES(callback, options){
             }
             break;
           case 'Notification':
-            // Get the message data of the notification to update email
-            let snsMessage = JSON.parse(snsBody.Message);
-            let callbackFunction = callback({
-              messageId: snsMessage.mail.messageId,
-              serviceStatus:snsMessage.notificationType,
-              from:snsMessage.mail.source,
-              status: (snsMessage.type === 'Delivery') ? 'Sent' : 'Failed',
-              destination: snsMessage.mail.destination,
-              timestamp: snsMessage.mail.timestamp,
-              rawMessage: snsMessage
-            });
-            // Check if is a promise
-            if(callbackFunction instanceof Function) {
-                yield callbackFunction();
+              // Get the message data of the notification to update email
+              let snsMessage = JSON.parse(snsBody.Message);
+              // Execute custom logic of callback and pass parameters
+              let funcRes = yield callback.call(this, {
+                messageId: snsMessage.mail.messageId,
+                serviceStatus:snsMessage.notificationType,
+                from:snsMessage.mail.source,
+                status: (snsMessage.type === 'Delivery') ? 'Sent' : 'Failed',
+                destination: snsMessage.mail.destination,
+                timestamp: snsMessage.mail.timestamp,
+                rawMessage: snsMessage
+              });
+              // Skip response if function returned value is false
+              if(funcRes || typeof funcRes === 'undefined') {
                 this.body = 'Ok';
-            } else {
-              throw new Error('Callback notification must return and resolve a promise.');
-            }
+              }
             break;
           default:
             this.status = 400;

@@ -16,7 +16,7 @@ var app = koa();
 
 // Create a function that will receive the
 // notification data coming from AWS. This is required
-var notificationHandler = function(message){
+var notificationHandler = function * (message){
 	// Your own logic to handle the notification
 };
 
@@ -26,7 +26,7 @@ With your own implementation sending emails by SES. You need to store the `messa
 
 
 ## Callback
-**It must return a Promise**. This is called when the middleware handles a notification with the following params.
+This is called when the middleware handles a notification with the following params.
 
 * **messageId**: id of the SES email on AWS.
 * **serviceStatus**: SES Status of the email. `['Delivery', 'Bounce', 'Complaint']`
@@ -35,6 +35,8 @@ With your own implementation sending emails by SES. You need to store the `messa
 * **destination**
 * **timestamp**
 * **rawMessage**: Need more data for custom behaviour? get it from here.
+
+*Bonus: you can skip response of middleware returning `false` in the callback function.*
 
 
 ## Options
