@@ -1,6 +1,6 @@
 'use strict';
 
-/*global describe, it  */
+/*global describe, it, after  */
 
 import koaSES from '../src';
 import sinon from 'sinon-es6';
@@ -21,27 +21,30 @@ describe('koa-ses', ()=>{
 
       it('Return a function when called', ()=>{
           let koaSes = koaSES(function(){});
-          koaSes.should.be.type('function');
+          assert.equal(typeof koaSes, 'function');
       });
 
     });
 
     describe('SNS notifications with SES message', ()=>{
 
-      it('Trigger a fake SES email notification from SNS', ()=>{
+      it('Trigger a fake SES email notification from SNS', function * (){
 
         let app = koa();
-        let sesSpy = sinon.stub().returns( Promise.resolve() );
+        let sesStub = sinon.stub().returns( Promise.resolve() );
 
-        app.use(koaSES(sesSpy));
+        app.use(koaSES(sesStub));
 
-        return request(http.createServer(app.callback()))
+        yield request(http.createServer(app.callback()))
         .post('/ses/notification')
         .set('x-amz-sns-message-type', 'Notification')
         // SNS has Content-Type text/plain
         // .set('Content-Type', 'text/plain; charset=UTF-8')
         .send(fakeData.notification)
         .expect(200, 'Ok');
+
+        assert.ok(sesStub.calledOnce);
+        assert.deepEqual(sesStub.getCall(0).args[0].rawMessage, JSON.parse(fakeData.notification.Message));
 
       });
 
