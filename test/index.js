@@ -2,7 +2,7 @@
 
 /*global describe, it  */
 
-import koaSES from '../dist';
+import koaSES from '../src';
 import sinon from 'sinon-es6';
 import request from 'supertest';
 import requestPromise from 'request-promise';
@@ -31,7 +31,7 @@ describe('koa-ses', ()=>{
       it('Trigger a fake SES email notification from SNS', ()=>{
 
         let app = koa();
-        let sesSpy = sinon.stub().returns(() => Promise.resolve());
+        let sesSpy = sinon.stub().returns( Promise.resolve() );
 
         app.use(koaSES(sesSpy));
 
