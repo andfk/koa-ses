@@ -1,0 +1,13 @@
+{
+    "node" : true,
+    "eqeqeq": true,
+    "undef": true,
+    "esnext" : true,
+    "freeze" : true,
+    "futurehostile" : true,
+    "maxdepth" : 4,
+    "maxparams" : 5,
+    "strict" : true,
+    "undef" : true,
+    "unused" : true
+}
