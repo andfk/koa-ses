@@ -71,7 +71,7 @@ function koaSES(callback, options){
                 messageId: snsMessage.mail.messageId,
                 serviceStatus:snsMessage.notificationType,
                 from:snsMessage.mail.source,
-                status: (snsMessage.type === 'Delivery') ? 'Sent' : 'Failed',
+                status: (snsMessage.notificationType === 'Delivery') ? 'Sent' : 'Failed',
                 destination: snsMessage.mail.destination,
                 timestamp: snsMessage.mail.timestamp,
                 rawMessage: snsMessage
