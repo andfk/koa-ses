@@ -1,6 +1,0 @@
---require babel-polyfill
---require co-mocha
---compilers js:babel-core/register
---reporter spec
--w
--G

@@ -3,7 +3,7 @@
 /*global describe, it, after  */
 
 import koaSES from '../src';
-import sinon from 'sinon-es6';
+import sinon from 'sinon';
 import request from 'supertest';
 import requestPromise from 'request-promise';
 import http from 'http';
