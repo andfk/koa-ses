@@ -2,11 +2,18 @@
 
 A middleware for Koa to receive and handle sns notifications [Amazon SNS](https://aws.amazon.com/sns/) from [Amazon SES](https://aws.amazon.com/ses/).
 
+[![](https://img.shields.io/node/v/koa-ses.svg?style=flat)](https://www.npmjs.com/package/koa-ses)
+[![Downloads](https://img.shields.io/npm/dm/koa-ses.svg?style=flat)](https://www.npmjs.com/package/koa-ses)
+[![](https://img.shields.io/travis/andfk/koa-ses.svg)](https://www.npmjs.com/package/koa-ses)
+
+
 ## Setup
 
 `npm i koa-ses -S`
 
 ## Usage
+
+**Important**: To receive notifications in your koa app you should have configured previously SNS with SES in your AWS account. Check [docs](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html) for more info.
 
 ```js
 var koa = require('koa');
