@@ -1,13 +1,13 @@
 {
   "name": "koa-ses",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Koa JS middleware to handle Amazon Simple Email Service notifications of SNS",
   "repository": {
     "type": "git",
     "url": "https://github.com/andfk/koa-ses.git"
   },
   "engines": {
-    "node": "> 0.12.14"
+    "node": ">= 0.12.14"
   },
   "main": "dist/index.js",
   "scripts": {
