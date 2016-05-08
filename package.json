@@ -1,17 +1,17 @@
 {
   "name": "koa-ses",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Koa JS middleware to handle Amazon Simple Email Service notifications of SNS",
   "repository": {
     "type": "git",
     "url": "https://github.com/andfk/koa-ses.git"
   },
   "engines": {
-    "node": "> 5"
+    "node": "> 0.12.14"
   },
   "main": "dist/index.js",
   "scripts": {
-    "test": "node node_modules/.bin/mocha --compilers js:babel-core/register --require babel-polyfill --reporter spec test/*",
+    "test": "node node_modules/.bin/mocha --harmony --compilers js:babel-core/register --require babel-polyfill --reporter spec test/*",
     "build": "node node_modules/.bin/babel src --out-dir dist",
     "prepublish": "npm run build"
   },
