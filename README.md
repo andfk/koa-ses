@@ -43,9 +43,6 @@ This is called when the middleware handles a notification with the following par
 * **timestamp**
 * **rawMessage**: Need more data for custom behaviour? get it from here.
 
-*Bonus: you can skip response of middleware returning `false` in the callback function.*
-
-
 ## Options
 
 * **path**: Path url to receive SNS http/s notifications. Default: `/ses/notifications`
@@ -56,7 +53,8 @@ PR are very welcome to this repo!
 
 ## To-do
 
-- [ ] Validate signature of notification
+- [x] Validate signature of notification
+- [ ] Improve code, testing and coverage
 
 ## Tests
 

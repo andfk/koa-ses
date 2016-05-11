@@ -1,15 +1,15 @@
-// Data in use comes from AWS SNS Docs (http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html)
+// Data in use comes from AWS SNS Docs with some modifications (http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html)
 export default {
   "notification" : {
     "Type" : "Notification",
-    "MessageId" : "346b626b-4ef9-51c8-8044-2dc84becb074",
-    "TopicArn" : "arn:aws:sns:eu-west-1:273330492891:musikdk_email",
-    "Message" : "{\"notificationType\":\"Delivery\",\"mail\":{\"timestamp\":\"2016-05-03T19:58:11.925Z\",\"source\":\"no-reply@musik.dk\",\"sourceArn\":\"arn:aws:ses:eu-west-1:273330492891:identity/no-reply@musik.dk\",\"sendingAccountId\":\"273330492891\",\"messageId\":\"0102015478330bd5-9c321a79-2bf1-4da3-b1b0-4c5a88eee0dc-000000\",\"destination\":[\"Manibetinapunk@gmail.com\"]},\"delivery\":{\"timestamp\":\"2016-05-03T19:58:12.830Z\",\"processingTimeMillis\":905,\"recipients\":[\"Manibetinapunk@gmail.com\"],\"smtpResponse\":\"250 2.0.0 OK 1462305492 70si208918wmw.48 - gsmtp\",\"reportingMTA\":\"a6-244.smtp-out.eu-west-1.amazonses.com\"}}",
-    "Timestamp" : "2016-05-03T19:58:13.046Z",
+    "MessageId" : "da41e39f-ea4d-435a-b922-c6aae3915ebe",
+    "TopicArn" : "arn:aws:sns:us-west-2:123456789012:MyTopic",
+    "Message" : "{\"notificationType\":\"Delivery\",\"mail\":{\"timestamp\":\"2012-04-25T21:49:25.719Z\",\"source\":\"no-reply@noreply.com\",\"sourceArn\":\"arn:aws:sns:us-west-2:123456789012:MyTopic\",\"sendingAccountId\":\"100000000000\",\"messageId\":\"06024413478330bd5-gc321a79-2bfa-4da3-b1b0-4e5a88eee0dc-000000\",\"destination\":[\"no-reply@noreply.com\"]},\"delivery\":{\"timestamp\":\"2012-04-25T21:49:25.719Z\",\"processingTimeMillis\":905,\"recipients\":[\"no-reply@noreply.com\"],\"smtpResponse\":\"250 2.0.0 OK 4124145 ag412415.48 - gsmtp\",\"reportingMTA\":\"a8-345.smtp-out.eu-west-1.amazonses.com\"}}",
+    "Timestamp" : "2012-04-25T21:49:25.719Z",
     "SignatureVersion" : "1",
-    "Signature" : "DifKj056UDkvvEvbynoEsMy5BDc4BD5KwWZ0QitWkZv5C3hWYE/9STOBiHH/TM8EzsXkktB3UW3GwR53YItMcp45l9rhcRiWNfBnuf620PTOaykh8RNBrW4soySPTmQsuWcvSxGYThqDxcA5F+dmWSJZPFsuQkVztuQQwdCaqT6V++HPcCKrg3Qjpns+OoZdez2eQqMu2uuEYEGSwTmhArQ5Zyz8pm1lw3DKn+JB0feN1OzLU+m9E8NjBCvbPCEN09gRyX5PI/1WG4nOWGRKBUIbMUP8VSePblcrE2bS5e6laRP/rBQdBTrlYCIgZCPb2bUnPQO+cQMwUXs+l887KA==",
-    "SigningCertURL" : "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-bb750dd426d95ee9390147a5624348ee.pem",
-    "UnsubscribeURL" : "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:273330492891:musikdk_email:414b3717-e0b0-4d57-8e25-6d0e3ba131a7"
+    "Signature" : "EXAMPLElDMXvB8r9R83tGoNn0ecwd5UjllzsvSvbItzfaMpN2nk5HVSw7XnOn/49IkxDKz8YrlH2qJXj2iZB0Zo2O71c4qQk1fMUDi3LGpij7RCW7AW9vYYsSqIKRnFS94ilu7NFhUzLiieYr4BKHpdTmdD6c0esKEYBpabxDSc=",
+    "SigningCertURL" : "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",
+    "UnsubscribeURL" : "https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:123456789012:MyTopic:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55"
   },
   "suscription" : {
     "Type" : "SubscriptionConfirmation",

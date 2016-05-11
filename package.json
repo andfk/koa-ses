@@ -11,7 +11,7 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "test": "node node_modules/.bin/mocha --harmony --compilers js:babel-core/register --require babel-polyfill --reporter spec test/*",
+    "test": "node node_modules/.bin/mocha --harmony --compilers js:babel-core/register --require co-mocha --require babel-polyfill --reporter spec test/*",
     "build": "node node_modules/.bin/babel src --out-dir dist",
     "prepublish": "npm run build"
   },

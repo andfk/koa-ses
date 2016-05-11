@@ -1,5 +1,53 @@
 'use strict';
 import request from 'request-promise';
+import crypto from 'crypto';
+
+// Implementation of the validator and builder of signature based on node-snsclient package. (https://github.com/mattrobenolt/node-snsclient)
+function buildSignatureString(message) {
+  let chunks = [];
+  if(message.Type === 'Notification') {
+      chunks.push('Message');
+      chunks.push(message.Message);
+      chunks.push('MessageId');
+      chunks.push(message.MessageId);
+      if(message.Subject) {
+          chunks.push('Subject');
+          chunks.push(message.Subject);
+      }
+      chunks.push('Timestamp');
+      chunks.push(message.Timestamp);
+      chunks.push('TopicArn');
+      chunks.push(message.TopicArn);
+      chunks.push('Type');
+      chunks.push(message.Type);
+  } else if(message.Type === 'SubscriptionConfirmation') {
+      chunks.push('Message');
+      chunks.push(message.Message);
+      chunks.push('MessageId');
+      chunks.push(message.MessageId);
+      chunks.push('SubscribeURL');
+      chunks.push(message.SubscribeURL);
+      chunks.push('Timestamp');
+      chunks.push(message.Timestamp);
+      chunks.push('Token');
+      chunks.push(message.Token);
+      chunks.push('TopicArn');
+      chunks.push(message.TopicArn);
+      chunks.push('Type');
+      chunks.push(message.Type);
+  } else { return false; }
+
+  return chunks.join('\n')+'\n';
+}
+
+function validateSignature(pem, message) {
+    let msg = buildSignatureString(message);
+    if(!msg) throw new Error('Invalid signature');
+
+    let verifier = crypto.createVerify('RSA-SHA1');
+    verifier.update(msg, 'utf8');
+    return verifier.verify(pem, message.Signature, 'base64');
+}
 
 /**
  * Koa-ses middleware to listen to get notifications and confirm subscription
@@ -11,8 +59,12 @@ import request from 'request-promise';
 function koaSES(callback, options){
 
   let defaultOptions = {
-    path: '/ses/notification'
+    path: '/ses/notification',
+    validate: true
   };
+
+  // Caches the certificates downloaded to validate signatures
+  let pemCache = [];
 
   options = Object.assign(defaultOptions, options);
 
@@ -49,7 +101,25 @@ function koaSES(callback, options){
         let requestMessageType = this.request.get('x-amz-sns-message-type');
         if(!requestMessageType) throw new Error('Header x-amz-sns-message-type is not set');
 
+        // Get body data
         let snsBody = yield getSNSBody();
+
+        // Validation happens by default. Skipped for testing/debugging if needed.
+        if(options.validate) {
+          // Validate signature version 1 only
+          if(snsBody.SignatureVersion !== "1") throw new Error(`No possible to validate handle signatures of version ${snsBody.SignatureVersion}. Only handles version 1.`);
+          // Get certificate from cache or download it
+          let pem;
+          if(!pemCache[snsBody.SigningCertURL]) {
+              pem = yield request.get(snsBody.SigningCertURL);
+              pemCache[snsBody.SigningCertURL] = pem;
+          } else {
+            pem = pemCache[snsBody.SigningCertURL];
+          }
+          // Finish request if validation fails
+          if(!validateSignature(pem, snsBody)) return this.res.end();
+        }
+
         switch (requestMessageType) {
           case 'SubscriptionConfirmation':
             // The confirmSubscription is called when a SNS suscription channel
@@ -67,7 +137,7 @@ function koaSES(callback, options){
               // Get the message data of the notification to update email
               let snsMessage = JSON.parse(snsBody.Message);
               // Execute custom logic of callback and pass parameters
-              let funcRes = yield callback.call(this, {
+              yield callback.call(this, {
                 messageId: snsMessage.mail.messageId,
                 serviceStatus:snsMessage.notificationType,
                 from:snsMessage.mail.source,
@@ -76,10 +146,7 @@ function koaSES(callback, options){
                 timestamp: snsMessage.mail.timestamp,
                 rawMessage: snsMessage
               });
-              // Skip response if function returned value is false
-              if(funcRes || typeof funcRes === 'undefined') {
-                this.body = 'Ok';
-              }
+              this.body = 'Ok';
             break;
           default:
             this.status = 400;

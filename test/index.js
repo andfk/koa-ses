@@ -1,6 +1,6 @@
 'use strict';
 
-/*global describe, it, after  */
+/*global describe, it, after, before  */
 
 import koaSES from '../src';
 import sinon from 'sinon';
@@ -26,55 +26,63 @@ describe('koa-ses', ()=>{
 
     });
 
-    describe('SNS notifications with SES message', ()=>{
+    describe('SNS notifications', function(){
 
-      it('Trigger a fake SES email notification from SNS', function * (){
 
-        let app = koa();
-        let sesStub = sinon.stub().returns( Promise.resolve() );
-
-        app.use(koaSES(sesStub));
-
-        yield request(http.createServer(app.callback()))
-        .post('/ses/notification')
-        .set('x-amz-sns-message-type', 'Notification')
-        // SNS has Content-Type text/plain
-        // .set('Content-Type', 'text/plain; charset=UTF-8')
-        .send(fakeData.notification)
-        .expect(200, 'Ok');
-
-        assert.ok(sesStub.calledOnce);
-        assert.deepEqual(sesStub.getCall(0).args[0].rawMessage, JSON.parse(fakeData.notification.Message));
+      before(()=>{
+        this.requestStub = sinon.stub(requestPromise, 'get');
+        this.requestStub.withArgs(fakeData.suscription.SubscribeURL).returns({msg:'ok'});
 
       });
 
-    });
+      describe('Suscription confirmation', ()=>{
 
-    describe('SNS suscription confirmation', ()=>{
+        it('Should receive and confirm a suscription to topic', ()=>{
 
-      let requestSpy;
-      it('Should receive and confirm a suscription to topic', ()=>{
+          let app = koa();
+          let sesSpy = sinon.spy();
 
-        requestSpy = sinon.stub(requestPromise, 'get').returns({msg:'ok'});
+          app.use(koaSES(sesSpy, {validate:false}));
 
-        let app = koa();
-        let sesSpy = sinon.spy();
+          return request(http.createServer(app.callback()))
+          .post('/ses/notification')
+          .set('x-amz-sns-message-type', fakeData.suscription.Type)
+          // SNS has Content-Type text/plain
+          // .set('Content-Type', 'text/plain; charset=UTF-8')
+          .send(fakeData.suscription)
+          .expect(200, 'Suscription confirmed');
 
-        app.use(koaSES(sesSpy));
+        });
 
-        return request(http.createServer(app.callback()))
-        .post('/ses/notification')
-        .set('x-amz-sns-message-type', 'SubscriptionConfirmation')
-        // SNS has Content-Type text/plain
-        // .set('Content-Type', 'text/plain; charset=UTF-8')
-        .send(fakeData.suscription)
-        .expect(200, 'Suscription confirmed');
+      });
+
+      describe('Notification from SES', ()=>{
+
+        it('Trigger a fake SES email notification from SNS', function * (){
+          let app = koa();
+          let sesStub = sinon.stub().returns( Promise.resolve() );
+
+          app.use(koaSES(sesStub, {validate:false}));
+
+          yield request(http.createServer(app.callback()))
+          .post('/ses/notification')
+          .set('x-amz-sns-message-type', fakeData.notification.Type)
+          // SNS has Content-Type text/plain
+          // .set('Content-Type', 'text/plain; charset=UTF-8')
+          .send(fakeData.notification)
+          .expect(200, 'Ok');
+
+          assert.ok(sesStub.calledOnce);
+          assert.deepEqual(sesStub.getCall(0).args[0].rawMessage, JSON.parse(fakeData.notification.Message));
+
+        });
 
       });
 
       after(()=>{
-        requestSpy.restore();
+        this.requestStub.restore();
       });
+
 
     });
 
