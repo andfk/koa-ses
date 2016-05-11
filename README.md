@@ -58,7 +58,7 @@ PR are very welcome to this repo!
 
 ## Tests
 
-`mocha`
+`npm test`
 
 ## Support
 
