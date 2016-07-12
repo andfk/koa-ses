@@ -48,7 +48,7 @@ describe('koa-ses', ()=>{
           .post('/ses/notification')
           .set('x-amz-sns-message-type', fakeData.suscription.Type)
           // SNS has Content-Type text/plain
-          // .set('Content-Type', 'text/plain; charset=UTF-8')
+          // .set('Content-Type', 'text/plain')
           .send(fakeData.suscription)
           .expect(200, 'Suscription confirmed');
 
@@ -68,7 +68,7 @@ describe('koa-ses', ()=>{
           .post('/ses/notification')
           .set('x-amz-sns-message-type', fakeData.notification.Type)
           // SNS has Content-Type text/plain
-          // .set('Content-Type', 'text/plain; charset=UTF-8')
+          // .set('Content-Type', 'text/plain')
           .send(fakeData.notification)
           .expect(200, 'Ok');
 

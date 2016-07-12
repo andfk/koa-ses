@@ -1,6 +1,7 @@
 'use strict';
 import request from 'request-promise';
 import crypto from 'crypto';
+import parse from 'co-body';
 
 // Implementation of the validator and builder of signature based on node-snsclient package. (https://github.com/mattrobenolt/node-snsclient)
 function buildSignatureString(message) {
@@ -80,29 +81,12 @@ function koaSES(callback, options){
 
       try {
 
-        // Get the body data and parse json from the http/s notification
-        let getSNSBody = ()=> {
-          return new Promise((resolve, reject)=>{
-            try {
-              let bodyData = [];
-              this.req.on('data', (chunk)=>{ bodyData.push(chunk); });
-              this.req.on('end', ()=>{
-                bodyData = bodyData.join('');
-                if(!bodyData) throw new Error('No body content in notification');
-                return resolve(JSON.parse(bodyData));
-              });
-            } catch (e) {
-              if(e) reject(e);
-            }
-          });
-        };
-
         // Get the header of message type from SNS
         let requestMessageType = this.request.get('x-amz-sns-message-type');
         if(!requestMessageType) throw new Error('Header x-amz-sns-message-type is not set');
 
         // Get body data
-        let snsBody = yield getSNSBody();
+        let snsBody = yield parse(this, {limit:'4kb'});
 
         // Validation happens by default. Skipped for testing/debugging if needed.
         if(options.validate) {
