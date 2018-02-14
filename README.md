@@ -1,5 +1,7 @@
 # koa-ses
 
+THIS MODULE IS UNMAINTAINED. USE IT CAREFULLY.
+
 A middleware for Koa to receive and handle sns notifications [Amazon SNS](https://aws.amazon.com/sns/) from [Amazon SES](https://aws.amazon.com/ses/).
 
 [![](https://img.shields.io/node/v/koa-ses.svg?style=flat)](https://www.npmjs.com/package/koa-ses)
